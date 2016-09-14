@@ -16,10 +16,10 @@
         /// </summary>
         /// <param name="asm">The assembly that should get scanned</param>
         /// <returns>The create statement</returns>
-        public static string GetCreateScript(this Assembly asm) {
+        public static string GetSqliteCreateScript(this Assembly asm) {
             var script = string.Empty;
             foreach (var item in asm.ExportedTypes.Where(c => c.GetTypeInfo().GetCustomAttribute<TableAttribute>() != null)) {
-                script += item.GetCreateScript();
+                script += item.GetSqliteCreateScript();
             }
             return script;
         }
@@ -29,7 +29,7 @@
         /// </summary>
         /// <param name="type">The type that should be used</param>
         /// <returns>The create statement</returns>
-        public static string GetCreateScript(this Type type) {
+        public static string GetSqliteCreateScript(this Type type) {
             var simpleProperties = type.GetProperties().Where(t => isSimpleType(t.PropertyType) && t.GetCustomAttribute<ColumnAttribute>() != null);
             var res = $"CREATE TABLE {type.Name} (";
             foreach (var item in simpleProperties) {
